@@ -35,6 +35,12 @@ header span{opacity:.85;font-size:17px}
 .num{width:100%;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px;font-size:28px;text-align:center;color:var(--ink)}
 .num:focus{outline:none;border-color:var(--g2)}
 h2{margin:0 0 4px;font-size:22px}
+.txt{width:100%;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px;font-size:18px;text-align:center;color:var(--ink);font-family:inherit}
+#pt0,#pt1{font-size:22px;padding:14px 6px}
+.txt:focus{outline:none;border-color:var(--g2)}
+.set-card .lbl{margin:10px 0 6px;font-size:15px}
+.set-card .row+.row{margin-top:2px}
+.tog.sm2{padding:10px 4px;font-size:18px}
 .sep{height:1px;background:var(--line);margin:16px 0 14px}
 .win{margin-top:12px}
 .add{width:100%;margin-top:22px;background:var(--red);color:#fff;border:0;border-radius:16px;padding:16px;font-size:22px;font-weight:800}
@@ -54,10 +60,24 @@ td.set{color:var(--red);font-weight:700}
 <div class="wrap">
   <header><h1>Rook Score</h1><span id="count">0 hands</span></header>
 
+  <div class="card set-card">
+    <h2>Game settings</h2>
+    <div class="row">
+      <div><div class="lbl">Team 1 name</div><input class="txt" id="tn0" maxlength="10" oninput="rename(0,this)"></div>
+      <div><div class="lbl">Team 2 name</div><input class="txt" id="tn1" maxlength="10" oninput="rename(1,this)"></div>
+    </div>
+    <div class="row">
+      <div><div class="lbl">Play to</div><input class="txt" id="target" type="number" inputmode="numeric" onchange="setTarget()"></div>
+      <div><div class="lbl">Points per hand</div>
+        <div class="row" style="gap:6px"><button class="tog sm2" id="tot180" onclick="setTotal(180)">180</button><button class="tog sm2" id="tot200" onclick="setTotal(200)">200</button></div>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="row">
-      <div class="team" id="box0"><input class="nm" id="nm0" maxlength="20" onchange="rename(0)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc0">0</div></div>
-      <div class="team" id="box1"><input class="nm" id="nm1" maxlength="20" onchange="rename(1)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc1">0</div></div>
+      <div class="team" id="box0"><input class="nm" id="nm0" maxlength="10" oninput="rename(0,this)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc0">0</div></div>
+      <div class="team" id="box1"><input class="nm" id="nm1" maxlength="10" oninput="rename(1,this)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc1">0</div></div>
     </div>
     <div class="win" id="win" hidden></div>
     <div class="sep"></div>
@@ -101,31 +121,22 @@ td.set{color:var(--red);font-weight:700}
       <button class="sm" id="ng" onclick="newGame()">New game</button>
     </div>
   </div>
-  <div class="card">
-    <h2>Game settings</h2>
-    <div class="meta" style="text-align:left">Play to <input id="target" type="number" inputmode="numeric" onchange="setTarget()"></div>
-    <div class="lbl">Points per hand</div>
-    <div class="row">
-      <button class="tog" id="tot180" onclick="setTotal(180)">180</button>
-      <button class="tog" id="tot200" onclick="setTotal(200)">200</button>
-    </div>
-    <div class="lbl" style="margin-bottom:0">Tip: tap a team name at the top to rename it.</div>
-  </div>
 </div>
 
 <script>
 var KEY = 'rookScore.v1';
 var S = load() || { names: ['Team 1', 'Team 2'], target: 1000, total: 200, hands: [] };
 var bidder = null, moon = false, made = null;
+S.names = S.names.map(function (n) { return String(n).slice(0, 10); });
 
 function $(id) { return document.getElementById(id); }
 function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-function rename(i) {
-  var n = $('nm' + i).value.trim();
-  if (n) S.names[i] = n;
+function rename(i, el) {
+  var n = el.value.trim().slice(0, 10);
+  S.names[i] = n || ('Team ' + (i + 1));
   save(); draw();
 }
 function setTarget() { var v = parseInt($('target').value, 10); if (v > 0) { S.target = v; save(); } draw(); }
@@ -190,6 +201,7 @@ function draw() {
   $('empty').hidden = S.hands.length > 0;
   for (var k = 0; k < 2; k++) {
     if (document.activeElement !== $('nm' + k)) $('nm' + k).value = S.names[k];
+    if (document.activeElement !== $('tn' + k)) $('tn' + k).value = S.names[k];
     $('th' + k).textContent = S.names[k];
     $('bid' + k).textContent = S.names[k];
     $('pt' + k).placeholder = S.names[k];
