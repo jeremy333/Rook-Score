@@ -25,7 +25,7 @@ header span{opacity:.85;font-size:17px}
 .team{background:#fff;border:2px solid var(--line);border-radius:16px;text-align:center;padding:14px 6px}
 .team.lead{border-color:var(--g2)}
 .team .nm{font-size:20px;font-weight:700;width:100%;border:0;background:transparent;text-align:center;font-family:inherit;color:var(--ink);padding:2px;border-radius:8px}.team .nm:focus{outline:2px solid var(--g2);background:var(--cream)}
-.team .sc{font-size:56px;font-weight:800;line-height:1.1}
+.team .sc{font-size:48px;font-weight:800;line-height:1.1}
 .team .sc.neg{color:var(--red)}
 .meta{text-align:center;color:var(--mute);margin:14px 0 6px;font-size:16px}
 .meta input{width:90px;text-align:center;font-size:17px;padding:4px;border:1px solid var(--line);border-radius:8px;background:#fff}
@@ -35,6 +35,8 @@ header span{opacity:.85;font-size:17px}
 .num{width:100%;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px;font-size:28px;text-align:center;color:var(--ink)}
 .num:focus{outline:none;border-color:var(--g2)}
 h2{margin:0 0 4px;font-size:22px}
+.sep{height:1px;background:var(--line);margin:16px 0 14px}
+.win{margin-top:12px}
 .add{width:100%;margin-top:22px;background:var(--red);color:#fff;border:0;border-radius:16px;padding:16px;font-size:22px;font-weight:800}
 .err{color:var(--red);text-align:center;min-height:20px;margin-top:8px;font-size:15px}
 .win{background:#fff;border:2px solid var(--g2);border-radius:14px;text-align:center;padding:12px;font-size:22px;font-weight:800;color:var(--g);margin-top:14px}
@@ -57,16 +59,8 @@ td.set{color:var(--red);font-weight:700}
       <div class="team" id="box0"><input class="nm" id="nm0" maxlength="20" onchange="rename(0)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc0">0</div></div>
       <div class="team" id="box1"><input class="nm" id="nm1" maxlength="20" onchange="rename(1)" onkeydown="if(event.key==='Enter')this.blur()"><div class="sc" id="sc1">0</div></div>
     </div>
-    <div class="meta">Play to <input id="target" type="number" inputmode="numeric" onchange="setTarget()"> · tap a name to rename</div>
     <div class="win" id="win" hidden></div>
-    <div class="lbl" style="text-align:center">Points per hand</div>
-    <div class="row">
-      <button class="tog" id="tot180" onclick="setTotal(180)">180</button>
-      <button class="tog" id="tot200" onclick="setTotal(200)">200</button>
-    </div>
-  </div>
-
-  <div class="card">
+    <div class="sep"></div>
     <h2>Add a hand</h2>
     <div class="lbl">Who won the bid?</div>
     <div class="row">
@@ -106,6 +100,16 @@ td.set{color:var(--red);font-weight:700}
       <button class="sm" onclick="undo()">Undo last hand</button>
       <button class="sm" id="ng" onclick="newGame()">New game</button>
     </div>
+  </div>
+  <div class="card">
+    <h2>Game settings</h2>
+    <div class="meta" style="text-align:left">Play to <input id="target" type="number" inputmode="numeric" onchange="setTarget()"></div>
+    <div class="lbl">Points per hand</div>
+    <div class="row">
+      <button class="tog" id="tot180" onclick="setTotal(180)">180</button>
+      <button class="tog" id="tot200" onclick="setTotal(200)">200</button>
+    </div>
+    <div class="lbl" style="margin-bottom:0">Tip: tap a team name at the top to rename it.</div>
   </div>
 </div>
 
